@@ -38,7 +38,7 @@ function getPixelData (uri, imageId, mediaType = 'application/octet-stream') {
     const loadPromise = xhrRequest(uri, imageId, headers);
 
     loadPromise.then(function (imageFrameAsArrayBuffer/* , xhr*/) {
-
+      window.console.log('cornerstone loaded a image', imageFrameAsArrayBuffer);
       // request succeeded, Parse the multi-part mime response
       const response = new Uint8Array(imageFrameAsArrayBuffer);
 
