@@ -7,7 +7,7 @@ module.exports = {
   },
   'extends': 'eslint:recommended',
   'plugins': ['import'],
-  "parser": "babel-eslint",
+  'parser': 'babel-eslint',
   'parserOptions': {
     'sourceType': 'module'
   },
@@ -65,11 +65,11 @@ module.exports = {
     'id-blacklist': 'warn',
     'id-length': 'off',
     'id-match': 'warn',
-    'indent': ['warn', 2],
+    'indent': ['warn', 4],
     //'init-declarations': 'warn',
     'import/default': 'warn',
     'import/export': 'warn',
-    'import/extensions': ['warn', { "js": "always" }],
+    'import/extensions': ['warn', { 'js': 'always' }],
     'import/first': 'warn',
     'import/named': 'warn',
     'import/namespace': 'warn',
