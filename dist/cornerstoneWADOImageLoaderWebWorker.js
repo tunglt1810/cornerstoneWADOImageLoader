@@ -1,4 +1,4 @@
-/*! cornerstone-wado-image-loader - 2.2.3 - 2019-07-24 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
+/*! cornerstone-wado-image-loader - 2.2.31 - 2019-07-24 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "590f7ed8e601a17349a5";
+/******/ 	var hotCurrentHash = "9ec1481dd2f036f11387";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1648,7 +1648,7 @@ function getMinMax(storedPixelData) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ('2.2.3');
+/* harmony default export */ __webpack_exports__["default"] = ('2.2.31');
 
 /***/ }),
 
