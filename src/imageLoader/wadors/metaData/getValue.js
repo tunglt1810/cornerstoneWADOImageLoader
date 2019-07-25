@@ -9,20 +9,20 @@
  * @returns {*}
  */
 function getValue (element, index, defaultValue) {
-  index = index || 0;
-  if (!element) {
-    return defaultValue;
-  }
-  // Value is not present if the attribute has a zero length value
-  if (!element.Value) {
-    return defaultValue;
-  }
-  // make sure we have the specified index
-  if (element.Value.length <= index) {
-    return defaultValue;
-  }
+    index = index || 0;
+    if (!element) {
+        return defaultValue;
+    }
+    // Value is not present if the attribute has a zero length value
+    if (!element.Value) {
+        return defaultValue;
+    }
+    // make sure we have the specified index
+    if (element.Value.length <= index) {
+        return defaultValue;
+    }
 
-  return element.Value[index];
+    return element.Value[index];
 }
 
 export default getValue;

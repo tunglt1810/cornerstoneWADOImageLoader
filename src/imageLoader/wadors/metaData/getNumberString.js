@@ -9,13 +9,13 @@ import getValue from './getValue.js';
  * @returns {*}
  */
 function getNumberString (element, index, defaultValue) {
-  const value = getValue(element, index, defaultValue);
+    const value = getValue(element, index, defaultValue);
 
-  if (value === undefined) {
-    return;
-  }
+    if (value === undefined) {
+        return;
+    }
 
-  return parseFloat(value);
+    return parseFloat(value);
 }
 
 export default getNumberString;

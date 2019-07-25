@@ -12,24 +12,24 @@ import getMinMax from './getMinMax.js';
  * Otherwise, correct them automatically.Default is true.
  */
 export default function calculateMinMax (imageFrame, strict = true) {
-  const minMax = getMinMax(imageFrame.pixelData);
-  const mustAssign = !(isNumber(imageFrame.smallestPixelValue) && isNumber(imageFrame.largestPixelValue));
+    const minMax = getMinMax(imageFrame.pixelData);
+    const mustAssign = !(isNumber(imageFrame.smallestPixelValue) && isNumber(imageFrame.largestPixelValue));
 
 
-  if (strict === true && !mustAssign) {
-    if (imageFrame.smallestPixelValue !== minMax.min) {
-      console.warn('Image smallestPixelValue tag is incorrect. Rendering performance will suffer considerably.');
+    if (strict === true && !mustAssign) {
+        if (imageFrame.smallestPixelValue !== minMax.min) {
+            console.warn('Image smallestPixelValue tag is incorrect. Rendering performance will suffer considerably.');
+        }
+
+        if (imageFrame.largestPixelValue !== minMax.max) {
+            console.warn('Image largestPixelValue tag is incorrect. Rendering performance will suffer considerably.');
+        }
+    } else {
+        imageFrame.smallestPixelValue = minMax.min;
+        imageFrame.largestPixelValue = minMax.max;
     }
-
-    if (imageFrame.largestPixelValue !== minMax.max) {
-      console.warn('Image largestPixelValue tag is incorrect. Rendering performance will suffer considerably.');
-    }
-  } else {
-    imageFrame.smallestPixelValue = minMax.min;
-    imageFrame.largestPixelValue = minMax.max;
-  }
 }
 
 function isNumber (numValue) {
-  return typeof numValue === 'number';
+    return typeof numValue === 'number';
 }

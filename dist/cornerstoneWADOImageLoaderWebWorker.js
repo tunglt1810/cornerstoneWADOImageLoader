@@ -1,4 +1,4 @@
-/*! cornerstone-wado-image-loader - 2.2.31 - 2019-07-24 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
+/*! cornerstone-wado-image-loader - 2.2.31 - 2019-07-25 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "9ec1481dd2f036f11387";
+/******/ 	var hotCurrentHash = "3a88219b6b972f328239";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -924,17 +924,17 @@ function decodeImageFrame(imageFrame, transferSyntax, pixelData, decodeConfig, o
     throw new Error("no decoder for transfer syntax ".concat(transferSyntax));
   }
   /* Don't know if these work...
-   // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
-   else if(transferSyntax === "1.2.840.10008.1.2.4.92")
-   {
-   return decodeJPEG2000(dataSet, frame);
-   }
-   // JPEG 2000 Part 2 Multicomponent Image Compression
-   else if(transferSyntax === "1.2.840.10008.1.2.4.93")
-   {
-   return decodeJPEG2000(dataSet, frame);
-   }
-   */
+  // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
+  else if(transferSyntax === "1.2.840.10008.1.2.4.92")
+  {
+  return decodeJPEG2000(dataSet, frame);
+  }
+  // JPEG 2000 Part 2 Multicomponent Image Compression
+  else if(transferSyntax === "1.2.840.10008.1.2.4.93")
+  {
+  return decodeJPEG2000(dataSet, frame);
+  }
+  */
 
 
   var shouldShift = imageFrame.pixelRepresentation !== undefined && imageFrame.pixelRepresentation === 1;

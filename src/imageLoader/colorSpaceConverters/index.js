@@ -5,9 +5,9 @@ import { default as convertYBRFullByPlane } from './convertYBRFullByPlane.js';
 import { default as convertPALETTECOLOR } from './convertPALETTECOLOR.js';
 
 export {
-  convertRGBColorByPixel,
-  convertRGBColorByPlane,
-  convertYBRFullByPixel,
-  convertYBRFullByPlane,
-  convertPALETTECOLOR
+    convertRGBColorByPixel,
+    convertRGBColorByPlane,
+    convertYBRFullByPixel,
+    convertYBRFullByPlane,
+    convertPALETTECOLOR
 };

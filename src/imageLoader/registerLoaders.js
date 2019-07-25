@@ -8,8 +8,8 @@ import wadouri from './wadouri/index.js';
  * @param cornerstone The Cornerstone Core library to register the image loaders with
  */
 function registerLoaders (cornerstone) {
-  wadors.register(cornerstone);
-  wadouri.register(cornerstone);
+    wadors.register(cornerstone);
+    wadouri.register(cornerstone);
 }
 
 export default registerLoaders;

@@ -1,5 +1,5 @@
 export default function (photoMetricInterpretation) {
-  return (photoMetricInterpretation === 'RGB' ||
+    return (photoMetricInterpretation === 'RGB' ||
     photoMetricInterpretation === 'PALETTE COLOR' ||
     photoMetricInterpretation === 'YBR_FULL' ||
     photoMetricInterpretation === 'YBR_FULL_422' ||

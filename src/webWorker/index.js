@@ -6,13 +6,13 @@ import { default as version } from '../version.js';
 registerTaskHandler(decodeTask);
 
 const cornerstoneWADOImageLoaderWebWorker = {
-  registerTaskHandler,
-  version
+    registerTaskHandler,
+    version
 };
 
 export {
-  registerTaskHandler,
-  version
+    registerTaskHandler,
+    version
 };
 
 export default cornerstoneWADOImageLoaderWebWorker;

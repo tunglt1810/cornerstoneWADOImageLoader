@@ -12,37 +12,37 @@ let config;
  * @param data
  */
 function initialize (data) {
-  // console.log('web worker initialize ', data.workerIndex);
-  // prevent initialization from happening more than once
-  if (initialized) {
-    return;
-  }
-
-  // save the config data
-  config = data.config;
-
-  // load any additional web worker tasks
-  if (data.config.webWorkerTaskPaths) {
-    for (let i = 0; i < data.config.webWorkerTaskPaths.length; i++) {
-      self.importScripts(data.config.webWorkerTaskPaths[i]);
+    // console.log('web worker initialize ', data.workerIndex);
+    // prevent initialization from happening more than once
+    if (initialized) {
+        return;
     }
-  }
 
-  // initialize each task handler
-  Object.keys(taskHandlers).forEach(function (key) {
-    taskHandlers[key].initialize(config.taskConfiguration);
-  });
+    // save the config data
+    config = data.config;
 
-  // tell main ui thread that we have completed initialization
-  self.postMessage({
-    taskType: 'initialize',
-    status: 'success',
-    result: {
-    },
-    workerIndex: data.workerIndex
-  });
+    // load any additional web worker tasks
+    if (data.config.webWorkerTaskPaths) {
+        for (let i = 0; i < data.config.webWorkerTaskPaths.length; i++) {
+            self.importScripts(data.config.webWorkerTaskPaths[i]);
+        }
+    }
 
-  initialized = true;
+    // initialize each task handler
+    Object.keys(taskHandlers).forEach(function (key) {
+        taskHandlers[key].initialize(config.taskConfiguration);
+    });
+
+    // tell main ui thread that we have completed initialization
+    self.postMessage({
+        taskType: 'initialize',
+        status: 'success',
+        result: {
+        },
+        workerIndex: data.workerIndex
+    });
+
+    initialized = true;
 }
 
 /**
@@ -50,15 +50,15 @@ function initialize (data) {
  * @param taskHandler
  */
 export function registerTaskHandler (taskHandler) {
-  if (taskHandlers[taskHandler.taskType]) {
-    console.log('attempt to register duplicate task handler "', taskHandler.taskType, '"');
+    if (taskHandlers[taskHandler.taskType]) {
+        console.log('attempt to register duplicate task handler "', taskHandler.taskType, '"');
 
-    return false;
-  }
-  taskHandlers[taskHandler.taskType] = taskHandler;
-  if (initialized) {
-    taskHandler.initialize(config.taskConfiguration);
-  }
+        return false;
+    }
+    taskHandlers[taskHandler.taskType] = taskHandler;
+    if (initialized) {
+        taskHandler.initialize(config.taskConfiguration);
+    }
 }
 
 /**
@@ -66,8 +66,8 @@ export function registerTaskHandler (taskHandler) {
  * @param data
  */
 function loadWebWorkerTask (data) {
-  config = data.config;
-  self.importScripts(data.sourcePath);
+    config = data.config;
+    self.importScripts(data.sourcePath);
 }
 
 /**
@@ -75,42 +75,42 @@ function loadWebWorkerTask (data) {
  * @param msg
  */
 self.onmessage = function (msg) {
-  // console.log('web worker onmessage', msg.data);
+    // console.log('web worker onmessage', msg.data);
 
-  // handle initialize message
-  if (msg.data.taskType === 'initialize') {
-    initialize(msg.data);
+    // handle initialize message
+    if (msg.data.taskType === 'initialize') {
+        initialize(msg.data);
 
-    return;
-  }
+        return;
+    }
 
-  // handle loadWebWorkerTask message
-  if (msg.data.taskType === 'loadWebWorkerTask') {
-    loadWebWorkerTask(msg.data);
+    // handle loadWebWorkerTask message
+    if (msg.data.taskType === 'loadWebWorkerTask') {
+        loadWebWorkerTask(msg.data);
 
-    return;
-  }
+        return;
+    }
 
-  // dispatch the message if there is a handler registered for it
-  if (taskHandlers[msg.data.taskType]) {
-    taskHandlers[msg.data.taskType].handler(msg.data, function (result, transferList) {
-      self.postMessage({
+    // dispatch the message if there is a handler registered for it
+    if (taskHandlers[msg.data.taskType]) {
+        taskHandlers[msg.data.taskType].handler(msg.data, function (result, transferList) {
+            self.postMessage({
+                taskType: msg.data.taskType,
+                status: 'success',
+                result,
+                workerIndex: msg.data.workerIndex
+            }, transferList);
+        });
+
+        return;
+    }
+
+    // not task handler registered - send a failure message back to ui thread
+    console.log('no task handler for ', msg.data.taskType);
+    console.log(taskHandlers);
+    self.postMessage({
         taskType: msg.data.taskType,
-        status: 'success',
-        result,
+        status: 'failed - no task handler registered',
         workerIndex: msg.data.workerIndex
-      }, transferList);
     });
-
-    return;
-  }
-
-  // not task handler registered - send a failure message back to ui thread
-  console.log('no task handler for ', msg.data.taskType);
-  console.log(taskHandlers);
-  self.postMessage({
-    taskType: msg.data.taskType,
-    status: 'failed - no task handler registered',
-    workerIndex: msg.data.workerIndex
-  });
 };

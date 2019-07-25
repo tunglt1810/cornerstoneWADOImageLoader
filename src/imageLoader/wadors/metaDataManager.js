@@ -3,24 +3,24 @@
 let imageIds = [];
 
 function add (imageId, metadata) {
-  imageIds[imageId] = metadata;
+    imageIds[imageId] = metadata;
 }
 
 function get (imageId) {
-  return imageIds[imageId];
+    return imageIds[imageId];
 }
 
 function remove (imageId) {
-  imageIds[imageId] = undefined;
+    imageIds[imageId] = undefined;
 }
 
 function purge () {
-  imageIds = [];
+    imageIds = [];
 }
 
 export default {
-  add,
-  get,
-  remove,
-  purge
+    add,
+    get,
+    remove,
+    purge
 };

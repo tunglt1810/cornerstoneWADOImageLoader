@@ -1,9 +1,9 @@
 import {
-  convertRGBColorByPixel,
-  convertRGBColorByPlane,
-  convertYBRFullByPixel,
-  convertYBRFullByPlane,
-  convertPALETTECOLOR
+    convertRGBColorByPixel,
+    convertRGBColorByPlane,
+    convertYBRFullByPixel,
+    convertYBRFullByPlane,
+    convertPALETTECOLOR
 } from './colorSpaceConverters/index.js';
 
 import { default as wadouri } from './wadouri/index.js';
@@ -23,49 +23,49 @@ import { internal } from './internal/index.js';
 import { default as external } from '../externalModules.js';
 
 const cornerstoneWADOImageLoader = {
-  convertRGBColorByPixel,
-  convertRGBColorByPlane,
-  convertYBRFullByPixel,
-  convertYBRFullByPlane,
-  convertPALETTECOLOR,
-  wadouri,
-  wadors,
-  configure,
-  convertColorSpace,
-  createImage,
-  decodeImageFrame,
-  decodeJPEGBaseline8BitColor,
-  getImageFrame,
-  getMinMax,
-  isColorImage,
-  isJPEGBaseline8BitColor,
-  webWorkerManager,
-  version,
-  internal,
-  external
+    convertRGBColorByPixel,
+    convertRGBColorByPlane,
+    convertYBRFullByPixel,
+    convertYBRFullByPlane,
+    convertPALETTECOLOR,
+    wadouri,
+    wadors,
+    configure,
+    convertColorSpace,
+    createImage,
+    decodeImageFrame,
+    decodeJPEGBaseline8BitColor,
+    getImageFrame,
+    getMinMax,
+    isColorImage,
+    isJPEGBaseline8BitColor,
+    webWorkerManager,
+    version,
+    internal,
+    external
 };
 
 export {
-  convertRGBColorByPixel,
-  convertRGBColorByPlane,
-  convertYBRFullByPixel,
-  convertYBRFullByPlane,
-  convertPALETTECOLOR,
-  wadouri,
-  wadors,
-  configure,
-  convertColorSpace,
-  createImage,
-  decodeImageFrame,
-  decodeJPEGBaseline8BitColor,
-  getImageFrame,
-  getMinMax,
-  isColorImage,
-  isJPEGBaseline8BitColor,
-  webWorkerManager,
-  version,
-  internal,
-  external
+    convertRGBColorByPixel,
+    convertRGBColorByPlane,
+    convertYBRFullByPixel,
+    convertYBRFullByPlane,
+    convertPALETTECOLOR,
+    wadouri,
+    wadors,
+    configure,
+    convertColorSpace,
+    createImage,
+    decodeImageFrame,
+    decodeJPEGBaseline8BitColor,
+    getImageFrame,
+    getMinMax,
+    isColorImage,
+    isJPEGBaseline8BitColor,
+    webWorkerManager,
+    version,
+    internal,
+    external
 };
 
 export default cornerstoneWADOImageLoader;

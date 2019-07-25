@@ -13,76 +13,76 @@ const webWorkers = [];
 const options = getOptions();
 
 const defaultConfig = {
-  maxWebWorkers: navigator.hardwareConcurrency || 1,
-  startWebWorkersOnDemand: true,
-  webWorkerPath: '../../dist/cornerstoneWADOImageLoaderWebWorker.js',
-  webWorkerTaskPaths: [],
-  taskConfiguration: {
-    decodeTask: {
-      loadCodecsOnStartup: true,
-      initializeCodecsOnStartup: false,
-      codecsPath: '../dist/cornerstoneWADOImageLoaderCodecs.js',
-      usePDFJS: false,
-      strict: options.strict
+    maxWebWorkers: navigator.hardwareConcurrency || 1,
+    startWebWorkersOnDemand: true,
+    webWorkerPath: '../../dist/cornerstoneWADOImageLoaderWebWorker.js',
+    webWorkerTaskPaths: [],
+    taskConfiguration: {
+        decodeTask: {
+            loadCodecsOnStartup: true,
+            initializeCodecsOnStartup: false,
+            codecsPath: '../dist/cornerstoneWADOImageLoaderCodecs.js',
+            usePDFJS: false,
+            strict: options.strict
+        }
     }
-  }
 };
 
 let config;
 
 const statistics = {
-  maxWebWorkers: 0,
-  numWebWorkers: 0,
-  numTasksQueued: 0,
-  numTasksExecuting: 0,
-  numTasksCompleted: 0,
-  totalTaskTimeInMS: 0,
-  totalTimeDelayedInMS: 0
+    maxWebWorkers: 0,
+    numWebWorkers: 0,
+    numTasksQueued: 0,
+    numTasksExecuting: 0,
+    numTasksCompleted: 0,
+    totalTaskTimeInMS: 0,
+    totalTimeDelayedInMS: 0
 };
 
 /**
  * Function to start a task on a web worker
  */
 function startTaskOnWebWorker () {
-  // return immediately if no decode tasks to do
-  if (!tasks.length) {
-    return;
-  }
-
-  // look for a web worker that is ready
-  for (let i = 0; i < webWorkers.length; i++) {
-    if (webWorkers[i].status === 'ready') {
-      // mark it as busy so tasks are not assigned to it
-      webWorkers[i].status = 'busy';
-
-      // get the highest priority task
-      const task = tasks.shift();
-
-      task.start = new Date().getTime();
-
-      // update stats with how long this task was delayed (waiting in queue)
-      const end = new Date().getTime();
-
-      statistics.totalTimeDelayedInMS += end - task.added;
-
-      // assign this task to this web worker and send the web worker
-      // a message to execute it
-      webWorkers[i].task = task;
-      webWorkers[i].worker.postMessage({
-        taskType: task.taskType,
-        workerIndex: i,
-        data: task.data
-      }, task.transferList);
-      statistics.numTasksExecuting++;
-
-      return;
+    // return immediately if no decode tasks to do
+    if (!tasks.length) {
+        return;
     }
-  }
 
-  // if no available web workers and we haven't started max web workers, start a new one
-  if (webWorkers.length < config.maxWebWorkers) {
-    spawnWebWorker();
-  }
+    // look for a web worker that is ready
+    for (let i = 0; i < webWorkers.length; i++) {
+        if (webWorkers[i].status === 'ready') {
+            // mark it as busy so tasks are not assigned to it
+            webWorkers[i].status = 'busy';
+
+            // get the highest priority task
+            const task = tasks.shift();
+
+            task.start = new Date().getTime();
+
+            // update stats with how long this task was delayed (waiting in queue)
+            const end = new Date().getTime();
+
+            statistics.totalTimeDelayedInMS += end - task.added;
+
+            // assign this task to this web worker and send the web worker
+            // a message to execute it
+            webWorkers[i].task = task;
+            webWorkers[i].worker.postMessage({
+                taskType: task.taskType,
+                workerIndex: i,
+                data: task.data
+            }, task.transferList);
+            statistics.numTasksExecuting++;
+
+            return;
+        }
+    }
+
+    // if no available web workers and we haven't started max web workers, start a new one
+    if (webWorkers.length < config.maxWebWorkers) {
+        spawnWebWorker();
+    }
 }
 
 /**
@@ -90,50 +90,50 @@ function startTaskOnWebWorker () {
  * @param msg
  */
 function handleMessageFromWorker (msg) {
-  // console.log('handleMessageFromWorker', msg.data);
-  if (msg.data.taskType === 'initialize') {
-    webWorkers[msg.data.workerIndex].status = 'ready';
-    startTaskOnWebWorker();
-  } else {
-    const start = webWorkers[msg.data.workerIndex].task.start;
+    // console.log('handleMessageFromWorker', msg.data);
+    if (msg.data.taskType === 'initialize') {
+        webWorkers[msg.data.workerIndex].status = 'ready';
+        startTaskOnWebWorker();
+    } else {
+        const start = webWorkers[msg.data.workerIndex].task.start;
 
-    webWorkers[msg.data.workerIndex].task.deferred.resolve(msg.data.result);
-    webWorkers[msg.data.workerIndex].task = undefined;
+        webWorkers[msg.data.workerIndex].task.deferred.resolve(msg.data.result);
+        webWorkers[msg.data.workerIndex].task = undefined;
 
-    statistics.numTasksExecuting--;
-    webWorkers[msg.data.workerIndex].status = 'ready';
-    statistics.numTasksCompleted++;
+        statistics.numTasksExecuting--;
+        webWorkers[msg.data.workerIndex].status = 'ready';
+        statistics.numTasksCompleted++;
 
-    const end = new Date().getTime();
+        const end = new Date().getTime();
 
-    statistics.totalTaskTimeInMS += end - start;
+        statistics.totalTaskTimeInMS += end - start;
 
-    startTaskOnWebWorker();
-  }
+        startTaskOnWebWorker();
+    }
 }
 
 /**
  * Spawns a new web worker
  */
 function spawnWebWorker () {
-  // prevent exceeding maxWebWorkers
-  if (webWorkers.length >= config.maxWebWorkers) {
-    return;
-  }
+    // prevent exceeding maxWebWorkers
+    if (webWorkers.length >= config.maxWebWorkers) {
+        return;
+    }
 
-  // spawn the webworker
-  const worker = new Worker(config.webWorkerPath);
+    // spawn the webworker
+    const worker = new Worker(config.webWorkerPath);
 
-  webWorkers.push({
-    worker,
-    status: 'initializing'
-  });
-  worker.addEventListener('message', handleMessageFromWorker);
-  worker.postMessage({
-    taskType: 'initialize',
-    workerIndex: webWorkers.length - 1,
-    config
-  });
+    webWorkers.push({
+        worker,
+        status: 'initializing'
+    });
+    worker.addEventListener('message', handleMessageFromWorker);
+    worker.postMessage({
+        taskType: 'initialize',
+        workerIndex: webWorkers.length - 1,
+        config
+    });
 }
 
 /**
@@ -141,34 +141,34 @@ function spawnWebWorker () {
  * @param configObject
  */
 function initialize (configObject) {
-  configObject = configObject || defaultConfig;
+    configObject = configObject || defaultConfig;
 
-  // prevent being initialized more than once
-  if (config) {
-    throw new Error('WebWorkerManager already initialized');
-  }
-
-  config = configObject;
-
-  config.maxWebWorkers = config.maxWebWorkers || (navigator.hardwareConcurrency || 1);
-
-  // Spawn new web workers
-  if (!config.startWebWorkersOnDemand) {
-    for (let i = 0; i < config.maxWebWorkers; i++) {
-      spawnWebWorker();
+    // prevent being initialized more than once
+    if (config) {
+        throw new Error('WebWorkerManager already initialized');
     }
-  }
+
+    config = configObject;
+
+    config.maxWebWorkers = config.maxWebWorkers || (navigator.hardwareConcurrency || 1);
+
+    // Spawn new web workers
+    if (!config.startWebWorkersOnDemand) {
+        for (let i = 0; i < config.maxWebWorkers; i++) {
+            spawnWebWorker();
+        }
+    }
 }
 
 /**
  * Terminate all running web workers.
  */
 function terminate () {
-  for (let i = 0; i < webWorkers.length; i++) {
-    webWorkers[i].terminate();
-  }
-  webWorkers.length = 0;
-  config = undefined;
+    for (let i = 0; i < webWorkers.length; i++) {
+        webWorkers[i].terminate();
+    }
+    webWorkers.length = 0;
+    config = undefined;
 }
 
 /**
@@ -177,24 +177,24 @@ function terminate () {
  * @param taskConfig
  */
 function loadWebWorkerTask (sourcePath, taskConfig) {
-  // add it to the list of web worker tasks paths so on demand web workers
-  // load this properly
-  config.webWorkerTaskPaths.push(sourcePath);
+    // add it to the list of web worker tasks paths so on demand web workers
+    // load this properly
+    config.webWorkerTaskPaths.push(sourcePath);
 
-  // if a task specific configuration is provided, merge it into the config
-  if (taskConfig) {
-    config.taskConfiguration = Object.assign(config.taskConfiguration, taskConfig);
-  }
+    // if a task specific configuration is provided, merge it into the config
+    if (taskConfig) {
+        config.taskConfiguration = Object.assign(config.taskConfiguration, taskConfig);
+    }
 
-  // tell each spawned web worker to load this task
-  for (let i = 0; i < webWorkers.length; i++) {
-    webWorkers[i].worker.postMessage({
-      taskType: 'loadWebWorkerTask',
-      workerIndex: webWorkers.length - 1,
-      sourcePath,
-      config
-    });
-  }
+    // tell each spawned web worker to load this task
+    for (let i = 0; i < webWorkers.length; i++) {
+        webWorkers[i].worker.postMessage({
+            taskType: 'loadWebWorkerTask',
+            workerIndex: webWorkers.length - 1,
+            sourcePath,
+            config
+        });
+    }
 }
 
 /**
@@ -207,48 +207,48 @@ function loadWebWorkerTask (sourcePath, taskConfig) {
  * @returns {*}
  */
 function addTask (taskType, data, priority = 0, transferList) {
-  if (!config) {
-    initialize();
-  }
-
-  let deferred = {};
-  const promise = new Promise((resolve, reject) => {
-    deferred = {
-      resolve,
-      reject
-    };
-  });
-
-  // find the right spot to insert this decode task (based on priority)
-  let i;
-
-  for (i = 0; i < tasks.length; i++) {
-    if (tasks[i].priority < priority) {
-      break;
+    if (!config) {
+        initialize();
     }
-  }
 
-  const taskId = nextTaskId++;
+    let deferred = {};
+    const promise = new Promise((resolve, reject) => {
+        deferred = {
+            resolve,
+            reject
+        };
+    });
 
-  // insert the decode task at position i
-  tasks.splice(i, 0, {
-    taskId,
-    taskType,
-    status: 'ready',
-    added: new Date().getTime(),
-    data,
-    deferred,
-    priority,
-    transferList
-  });
+    // find the right spot to insert this decode task (based on priority)
+    let i;
 
-  // try to start a task on the web worker since we just added a new task and a web worker may be available
-  startTaskOnWebWorker();
+    for (i = 0; i < tasks.length; i++) {
+        if (tasks[i].priority < priority) {
+            break;
+        }
+    }
 
-  return {
-    taskId,
-    promise
-  };
+    const taskId = nextTaskId++;
+
+    // insert the decode task at position i
+    tasks.splice(i, 0, {
+        taskId,
+        taskType,
+        status: 'ready',
+        added: new Date().getTime(),
+        data,
+        deferred,
+        priority,
+        transferList
+    });
+
+    // try to start a task on the web worker since we just added a new task and a web worker may be available
+    startTaskOnWebWorker();
+
+    return {
+        taskId,
+        promise
+    };
 }
 
 /**
@@ -258,30 +258,30 @@ function addTask (taskType, data, priority = 0, transferList) {
  * @returns boolean - true on success, false if taskId not found
  */
 function setTaskPriority (taskId, priority = 0) {
-  // search for this taskId
-  for (let i = 0; i < tasks.length; i++) {
-    if (tasks[i].taskId === taskId) {
-      // taskId found, remove it
-      const task = tasks.splice(i, 1)[0];
+    // search for this taskId
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].taskId === taskId) {
+            // taskId found, remove it
+            const task = tasks.splice(i, 1)[0];
 
-      // set its priority
-      task.priority = priority;
+            // set its priority
+            task.priority = priority;
 
-      // find the right spot to insert this decode task (based on priority)
-      for (i = 0; i < tasks.length; i++) {
-        if (tasks[i].priority < priority) {
-          break;
+            // find the right spot to insert this decode task (based on priority)
+            for (i = 0; i < tasks.length; i++) {
+                if (tasks[i].priority < priority) {
+                    break;
+                }
+            }
+
+            // insert the decode task at position i
+            tasks.splice(i, 0, task);
+
+            return true;
         }
-      }
-
-      // insert the decode task at position i
-      tasks.splice(i, 0, task);
-
-      return true;
     }
-  }
 
-  return false;
+    return false;
 }
 
 /**
@@ -291,19 +291,19 @@ function setTaskPriority (taskId, priority = 0) {
  * @returns boolean - true on success, false if taskId not found
  */
 function cancelTask (taskId, reason) {
-  // search for this taskId
-  for (let i = 0; i < tasks.length; i++) {
-    if (tasks[i].taskId === taskId) {
-      // taskId found, remove it
-      const task = tasks.splice(i, 1);
+    // search for this taskId
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].taskId === taskId) {
+            // taskId found, remove it
+            const task = tasks.splice(i, 1);
 
-      task.deferred.reject(reason);
+            task.deferred.reject(reason);
 
-      return true;
+            return true;
+        }
     }
-  }
 
-  return false;
+    return false;
 }
 
 /**
@@ -311,20 +311,20 @@ function cancelTask (taskId, reason) {
  * @returns object containing statistics
  */
 function getStatistics () {
-  statistics.maxWebWorkers = config.maxWebWorkers;
-  statistics.numWebWorkers = webWorkers.length;
-  statistics.numTasksQueued = tasks.length;
+    statistics.maxWebWorkers = config.maxWebWorkers;
+    statistics.numWebWorkers = webWorkers.length;
+    statistics.numTasksQueued = tasks.length;
 
-  return statistics;
+    return statistics;
 }
 
 export default {
-  initialize,
-  loadWebWorkerTask,
-  addTask,
-  getStatistics,
-  setTaskPriority,
-  cancelTask,
-  webWorkers,
-  terminate
+    initialize,
+    loadWebWorkerTask,
+    addTask,
+    getStatistics,
+    setTaskPriority,
+    cancelTask,
+    webWorkers,
+    terminate
 };

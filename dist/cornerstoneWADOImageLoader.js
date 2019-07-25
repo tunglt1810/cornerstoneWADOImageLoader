@@ -1,4 +1,4 @@
-/*! cornerstone-wado-image-loader - 2.2.31 - 2019-07-24 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
+/*! cornerstone-wado-image-loader - 2.2.31 - 2019-07-25 | (c) 2016 Chris Hafey | https://github.com/cornerstonejs/cornerstoneWADOImageLoader */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "9ec1481dd2f036f11387";
+/******/ 	var hotCurrentHash = "3a88219b6b972f328239";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1490,17 +1490,17 @@ function decodeImageFrame(imageFrame, transferSyntax, pixelData, canvas) {
     return processDecodeTask(imageFrame, transferSyntax, pixelData, options);
   }
   /* Don't know if these work...
-   // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
-   else if(transferSyntax === "1.2.840.10008.1.2.4.92")
-   {
-   return cornerstoneWADOImageLoader.decodeJPEG2000(dataSet, frame);
-   }
-   // JPEG 2000 Part 2 Multicomponent Image Compression
-   else if(transferSyntax === "1.2.840.10008.1.2.4.93")
-   {
-   return cornerstoneWADOImageLoader.decodeJPEG2000(dataSet, frame);
-   }
-   */
+  // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
+  else if(transferSyntax === "1.2.840.10008.1.2.4.92")
+  {
+  return cornerstoneWADOImageLoader.decodeJPEG2000(dataSet, frame);
+  }
+  // JPEG 2000 Part 2 Multicomponent Image Compression
+  else if(transferSyntax === "1.2.840.10008.1.2.4.93")
+  {
+  return cornerstoneWADOImageLoader.decodeJPEG2000(dataSet, frame);
+  }
+  */
 
 
   return new Promise(function (resolve, reject) {
@@ -2112,8 +2112,7 @@ function getPixelData(uri, imageId) {
     loadPromise.then(function (imageFrameAsArrayBuffer
     /* , xhr*/
     ) {
-      window.console.log('cornerstone loaded a image', imageFrameAsArrayBuffer); // request succeeded, Parse the multi-part mime response
-
+      // request succeeded, Parse the multi-part mime response
       var response = new Uint8Array(imageFrameAsArrayBuffer); // First look for the multipart mime header
 
       var tokenIndex = Object(_findIndexOfString_js__WEBPACK_IMPORTED_MODULE_1__["default"])(response, '\r\n\r\n');
@@ -2505,7 +2504,9 @@ function metaDataProvider(type, imageId) {
     return;
   }
 
-  if (type === 'all') return metaData;
+  if (type === 'all') {
+    return metaData;
+  }
 
   if (type === 'generalSeriesModule') {
     return {
@@ -4317,17 +4318,17 @@ function decodeImageFrame(imageFrame, transferSyntax, pixelData, decodeConfig, o
     throw new Error("no decoder for transfer syntax ".concat(transferSyntax));
   }
   /* Don't know if these work...
-   // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
-   else if(transferSyntax === "1.2.840.10008.1.2.4.92")
-   {
-   return decodeJPEG2000(dataSet, frame);
-   }
-   // JPEG 2000 Part 2 Multicomponent Image Compression
-   else if(transferSyntax === "1.2.840.10008.1.2.4.93")
-   {
-   return decodeJPEG2000(dataSet, frame);
-   }
-   */
+  // JPEG 2000 Part 2 Multicomponent Image Compression (Lossless Only)
+  else if(transferSyntax === "1.2.840.10008.1.2.4.92")
+  {
+  return decodeJPEG2000(dataSet, frame);
+  }
+  // JPEG 2000 Part 2 Multicomponent Image Compression
+  else if(transferSyntax === "1.2.840.10008.1.2.4.93")
+  {
+  return decodeJPEG2000(dataSet, frame);
+  }
+  */
 
 
   var shouldShift = imageFrame.pixelRepresentation !== undefined && imageFrame.pixelRepresentation === 1;
