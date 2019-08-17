@@ -24,7 +24,10 @@ function metaDataProvider (type, imageId) {
       seriesNumber: getNumberValue(metaData['00200011']),
       studyInstanceUID: getValue(metaData['0020000d']),
       seriesDate: dicomParser.parseDA(getValue(metaData['00080021'])),
-      seriesTime: dicomParser.parseTM(getValue(metaData['00080031'], 0, ''))
+      seriesTime: dicomParser.parseTM(getValue(metaData['00080031'], 0, '')),
+      lossyImageCompression: getValue(metaData['00282110']),
+      lossyImageCompressionRatio: getValue(metaData['00282112']),
+      lossyImageCompressionMethod: getValue(metaData['00282114'])
     };
   }
 
