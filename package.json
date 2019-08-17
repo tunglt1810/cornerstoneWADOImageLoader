@@ -1,6 +1,6 @@
 {
   "name": "cornerstone-wado-image-loader",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Cornerstone Image Loader for DICOM WADO-URI and WADO-RS",
   "keywords": [
     "DICOM",
@@ -10,13 +10,14 @@
     "imaging"
   ],
   "author": "Chris Hafey",
+  "forker": "TungLT",
   "homepage": "https://github.com/cornerstonejs/cornerstoneWADOImageLoader",
   "license": "MIT",
   "main": "./dist/cornerstoneWADOImageLoader.min.js",
   "module": "./dist/cornerstoneWADOImageLoader.min.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cornerstonejs/cornerstoneWADOImageLoader.git"
+    "url": "https://github.com/tunglt1810/cornerstoneWADOImageLoader.git"
   },
   "scripts": {
     "build": "npm run build:es6",
