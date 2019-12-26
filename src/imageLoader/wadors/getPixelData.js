@@ -45,7 +45,14 @@ function getPixelData(uri, imageId, mediaType = 'application/octet-stream') {
       const tokenIndex = findIndexOfString(response, '\r\n\r\n');
 
       if (tokenIndex === -1) {
-        reject(new Error('invalid response - no multipart mime header'));
+        // reject(new Error('invalid response - no multipart mime header'));
+
+        resolve({
+          contentType: 'application/json',
+          imageFrame: {
+            pixelData: response,
+          },
+        });
       }
       const header = uint8ArrayToString(response, 0, tokenIndex);
       // Now find the boundary  marker
