@@ -138,7 +138,7 @@ function createImage(imageId, pixelData, transferSyntax, options) {
         maxPixelValue: imageFrame.largestPixelValue,
         rowPixelSpacing: imagePlaneModule.rowPixelSpacing,
         rows: imageFrame.rows,
-        sizeInBytes: imageFrame.pixelData.length,
+        sizeInBytes: imageFrame.pixelData.byteLength,
         slope: modalityLutModule.rescaleSlope
           ? modalityLutModule.rescaleSlope
           : 1,
@@ -151,6 +151,7 @@ function createImage(imageId, pixelData, transferSyntax, options) {
           : undefined,
         decodeTimeInMS: imageFrame.decodeTimeInMS,
         floatPixelData: undefined,
+        transferSyntax,
       };
 
       // add function to return pixel data
