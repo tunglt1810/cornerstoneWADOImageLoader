@@ -13,8 +13,8 @@
   "forker": "TungLT",
   "homepage": "https://github.com/cornerstonejs/cornerstoneWADOImageLoader",
   "license": "MIT",
-  "main": "./dist/cornerstoneWADOImageLoader.min.js",
-  "module": "./dist/cornerstoneWADOImageLoader.min.js",
+  "main": "./dist/cornerstoneWADOImageLoader.js",
+  "module": "./dist/cornerstoneWADOImageLoader.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/tunglt1810/cornerstoneWADOImageLoader.git"
