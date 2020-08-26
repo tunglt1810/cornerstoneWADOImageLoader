@@ -1,6 +1,8 @@
-configuration export-ignore
+config export-ignore
 example export-ignore
 src export-ignore
+test export-ignore
+testImages export-ignore
 yarn.lock export-ignore
 .* export-ignore
 
