@@ -58,13 +58,16 @@ export function getTransferSyntaxForContentType(contentType) {
   return defaultTransferSyntax;
 }
 
-function loadImage(imageId, options) {
+function loadImage(imageId, options = {}) {
   const start = new Date().getTime();
   const uri = imageId.substring(7);
 
   const promise = new Promise((resolve, reject) => {
     // TODO: load bulk data items that we might need
-    const mediaType = 'multipart/related; type="application/octet-stream"'; // 'image/dicom+jp2';
+    // Mod by Triet: support custom mediaType
+    const {
+      mediaType = 'multipart/related; type="application/octet-stream"',
+    } = options; // 'image/dicom+jp2';
 
     // get the pixel data from the server
     getPixelData(uri, imageId, mediaType)
