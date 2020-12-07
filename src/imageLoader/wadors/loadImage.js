@@ -7,6 +7,11 @@ import createImage from '../createImage.js';
  * @param {string} contentType The value of the content-type header as returned by the WADO-RS server.
  * @return The transfer-syntax as announced by the server, or Implicit Little Endian by default.
  */
+
+// Mod by Triet
+// Define default Accept header in case custom Accept header isnt supported by the server
+const DEFAULT_MEDIATYPE = 'multipart/related; type="application/octet-stream"';
+
 export function getTransferSyntaxForContentType(contentType) {
   const defaultTransferSyntax = '1.2.840.10008.1.2'; // Default is Implicit Little Endian.
 
@@ -68,8 +73,9 @@ function loadImage(imageId, options = {}) {
     const {
       mediaType = 'multipart/related; type="application/octet-stream"',
     } = options; // 'image/dicom+jp2';
-
+    const shouldRetryWithDefaultMediaType = mediaType !== DEFAULT_MEDIATYPE;
     // get the pixel data from the server
+
     getPixelData(uri, imageId, mediaType)
       .then(result => {
         const transferSyntax = getTransferSyntaxForContentType(
@@ -89,10 +95,40 @@ function loadImage(imageId, options = {}) {
 
           image.loadTimeInMS = end - start;
           resolve(image);
-        }, reject);
-      }, reject)
+        });
+      })
       .catch(error => {
-        reject(error);
+        console.warn(error);
+        // Mod by Triet
+        // Fallback: get pixel data by default mediaType
+        if (shouldRetryWithDefaultMediaType) {
+          getPixelData(uri, imageId, DEFAULT_MEDIATYPE)
+            .then(result => {
+              const transferSyntax = getTransferSyntaxForContentType(
+                result.contentType
+              );
+              const pixelData = result.imageFrame.pixelData;
+              const imagePromise = createImage(
+                imageId,
+                pixelData,
+                transferSyntax,
+                options
+              );
+
+              imagePromise.then(image => {
+                // add the loadTimeInMS property
+                const end = new Date().getTime();
+
+                image.loadTimeInMS = end - start;
+                resolve(image);
+              }, reject);
+            }, reject)
+            .catch(fallBackError => {
+              reject(fallBackError);
+            });
+        } else {
+          reject(error);
+        }
       });
   });
 
